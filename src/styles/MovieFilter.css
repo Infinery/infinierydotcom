@@ -23,16 +23,33 @@
   box-sizing: inherit;
 }
 
-/* Main container */
+/* Main container with background image */
 .movie-filter-container {
   min-height: 100vh;
-  background: linear-gradient(to bottom, var(--bg-light), #f1f5f9);
+  background: url('./bg.jpg') no-repeat center center; /* Replace with your image path */
+  background-size: cover;
+  position: relative;
   padding: 2rem 1rem;
+}
+
+/* Overlay with blur effect */
+.movie-filter-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.7); /* White overlay with transparency */
+  backdrop-filter: blur(0.005px); /* Light blur - adjust value as needed */
+  z-index: 0;
 }
 
 .movie-filter-inner {
   max-width: 1100px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1; /* Position content above the blur overlay */
 }
 
 /* Header */
@@ -46,8 +63,7 @@
 
 /* Card */
 .movie-filter-card {
-  background-color: var(--bg-card);
-  background-image: linear-gradient(to bottom, rgba(248, 250, 252, 0.8), rgba(241, 245, 249, 0.8));
+  background-color: rgba(248, 250, 252, 0.85); /* Slightly transparent card background */
   border-radius: 1rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   border: 1px solid var(--border-color);
@@ -300,6 +316,11 @@ input:checked + .toggle-slider:before {
   justify-content: center;
   align-items: center;
   height: 16rem;
+  position: relative;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 1rem;
+  backdrop-filter: blur(5px);
 }
 
 .loading-spinner {
@@ -330,9 +351,14 @@ input:checked + .toggle-slider:before {
 /* Ready state */
 .ready-container {
   text-align: center;
-  padding: 2rem 0;
+  padding: 2rem;
   max-width: 36rem;
   margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 1rem;
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(5px);
 }
 
 .ready-title {
@@ -353,8 +379,22 @@ input:checked + .toggle-slider:before {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(to bottom, var(--bg-light), #f1f5f9);
+  background: url('./bg.jpg') no-repeat center center; /* Match the main container background */
+  background-size: cover;
+  position: relative;
   padding: 1rem;
+}
+
+.error-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(3px);
+  z-index: 0;
 }
 
 .error-card {
@@ -366,6 +406,8 @@ input:checked + .toggle-slider:before {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   max-width: 28rem;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 .error-title {

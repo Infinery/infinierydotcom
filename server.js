@@ -5,28 +5,37 @@ const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Enable CORS (Allow all origins for now)
+// Enable CORS
 app.use(cors());
-app.use(express.json()); // Middleware to parse JSON bodies
+app.use(express.json());
 
 // MongoDB connection string
 const MONGODB_URI = "mongodb+srv://sriram:sri8248950703@movies.q0bqf.mongodb.net/movies?retryWrites=true&w=majority&appName=movies";
-//const MONGODB_URI = "mongodb+srv://sriram:sri8248950703@movies.q0bqf.mongodb.net/?retryWrites=true&w=majority&appName=movies"
 
 console.log("Connecting to MongoDB...");
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("✅ Connected to MongoDB Atlas successfully"))
   .catch(err => {
     console.error("❌ MongoDB connection error:", err.message);
-    process.exit(1); // Exit if DB connection fails
+    process.exit(1);
   });
 
-// Define Movie Schema
+// Define Movie Schema based on the actual document structure
 const movieSchema = new mongoose.Schema({
   title: String,
-  year: Number,
-  cast: [String],
-  genres: [String],
+  release_date: String,
+  runtime: Number,
+  adult: Boolean,
+  backdrop_path: String,
+  homepage: String,
+  original_language: String,
+  overview: String,
+  poster_path: String,
+  tagline: String,
+  genres: String,
+  production_countries: String,
+  spoken_languages: String,
+  average_rating: Number
 }, { strict: false });
 
 const Movie = mongoose.model("Movie", movieSchema);
@@ -71,16 +80,27 @@ app.get("/api/movies", async (req, res) => {
       };
     }
 
-    // Release year filter (with ±3 years flexibility)
+    // Release year filter for string date format "YYYY-MM-DD"
     if (req.query.year) {
       const year = parseInt(req.query.year);
-      query.release_date = { 
-        $gte: new Date(year - 3, 0, 1),
-        $lte: new Date(year + 3, 11, 31)
+      const startYear = year - 3;
+      const endYear = year + 3;
+      
+      // Create regex pattern to match any date string starting with any year in the range
+      const yearPattern = Array.from(
+        { length: endYear - startYear + 1 }, 
+        (_, i) => `${startYear + i}`
+      ).join("|");
+      
+      query.release_date = {
+        $regex: `^(${yearPattern})-`,
+        $options: 'i'
       };
+      
+      console.log(`🔍 Searching for release dates between ${startYear} and ${endYear} using regex pattern: ^(${yearPattern})-`);
     }
 
-    // Runtime filter (with ±15 minutes flexibility)
+    // Runtime filter
     if (req.query.runtime) {
       const runtime = parseInt(req.query.runtime);
       query.runtime = { 
@@ -97,6 +117,9 @@ app.get("/api/movies", async (req, res) => {
       };
     }
 
+    // Log the final query for debugging
+    console.log("🔍 Final MongoDB query:", JSON.stringify(query, null, 2));
+
     // Sorting options
     const sortOptions = {
       rating: { average_rating: -1 },
@@ -109,7 +132,7 @@ app.get("/api/movies", async (req, res) => {
     const sortBy = req.query.sortBy || 'rating';
     const sort = sortOptions[sortBy] || sortOptions.rating;
 
-    // Count total matching documents based on the query
+    // Count total matching documents
     const total = await Movie.countDocuments(query);
     console.log(`📊 Total matching movies: ${total}`);
 
