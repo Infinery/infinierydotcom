@@ -95,8 +95,13 @@ const MovieFilter = () => {
 
   return (
     <div className="movie-filter movie-filter-container">
+      <div className="marquee" style={{ backgroundColor: '#ffcc00', color: '#000', padding: '10px', textAlign: 'center', cursor: 'pointer' }} onClick={() => navigate('/domain-sale')}>
+        <marquee behavior="scroll" direction="left" style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
+          This domain is available for sale. Click to know more.
+        </marquee>
+      </div>
       <div className="movie-filter-inner">
-        <h1 className="movie-filter-title">Movie Recommendation</h1>
+        <h1 className="movie-filter-title" style={{ backgroundColor: 'white', color: 'black', padding: '10px', borderRadius: '5px', textAlign: 'center', fontFamily: 'Arial, sans-serif', marginTop: '20px' }}>infimovies.com</h1>
 
         <div className="movie-filter-card">
           <h2 className="movie-filter-card-title">Find Movies</h2>
@@ -253,4 +258,3 @@ const MovieFilter = () => {
 }
 
 export default MovieFilter
-

@@ -48,9 +48,9 @@ const MovieResults = () => {
       console.log("Search criteria:", searchCriteria)
       console.log("Query params:", queryParams.toString())
 
-      const response = await fetch(`https://infimoviestesting.onrender.com/api/movies?${queryParams}`)
+      //const response = await fetch(`https://infimoviestesting.onrender.com/api/movies?${queryParams}`)
       // Development
-      //const response = await fetch(`http://localhost:5000/api/movies?${queryParams}`);
+      const response = await fetch(`http://localhost:5000/api/movies?${queryParams}`);
 
       if (!response.ok) throw new Error(`Failed to fetch movies: ${response.status}`)
 
