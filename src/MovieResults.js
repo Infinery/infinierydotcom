@@ -50,7 +50,8 @@ const MovieResults = () => {
 
       //const response = await fetch(`https://infimoviestesting.onrender.com/api/movies?${queryParams}`)
       // Development
-      const response = await fetch(`http://localhost:5000/api/movies?${queryParams}`);
+      //const response = await fetch(`http://localhost:5000/api/movies?${queryParams}`);
+      const response = await fetch('https://infinierydotcom.onrender.com/api/movies?${queryParams}');
 
       if (!response.ok) throw new Error(`Failed to fetch movies: ${response.status}`)
 
