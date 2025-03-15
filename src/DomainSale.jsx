@@ -6,7 +6,7 @@ const DomainSalePage = () => {
   // Contact information - replace with your own
   const contactEmail = "infinery11@gmail.com"
   const linkedinUrl = "https://www.linkedin.com/in/shivam-jangid"
-  const githubUrl = "https://github.com/yourusername"
+  const githubUrl = "https://github.com/Infinery"
 
   // State for copy button text
   const [copyStatus, setCopyStatus] = useState({
