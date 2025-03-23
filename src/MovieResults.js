@@ -91,7 +91,7 @@ const MovieResults = () => {
     if (searchCriteria.minRating > 0) displayCriteria.push(`Min Rating: ${searchCriteria.minRating}`)
     displayCriteria.push(`Adult Content: ${searchCriteria.adult ? "Yes" : "No"}`)
     if (searchCriteria.country) displayCriteria.push(`Country: ${searchCriteria.country}`)
-    if (searchCriteria.releaseYear) displayCriteria.push(`Year: ${searchCriteria.releaseYear} (±3)`)
+    if (searchCriteria.releaseYear) displayCriteria.push(`Year: ${searchCriteria.releaseYear} and newer`)
     if (searchCriteria.runtime) displayCriteria.push(`Runtime: ${searchCriteria.runtime} min (±15)`)
     if (searchCriteria.genre) displayCriteria.push(`Genre: ${searchCriteria.genre}`)
 

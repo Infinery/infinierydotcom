@@ -13,6 +13,7 @@ const MovieFilter = () => {
   const [language, setLanguage] = useState("")
   const [minRating, setMinRating] = useState(0)
   const [adult, setAdult] = useState(false)
+  const [ageVerified, setAgeVerified] = useState(false)
   const [country, setCountry] = useState("")
   const [releaseYear, setReleaseYear] = useState("")
   const [runtime, setRuntime] = useState("")
@@ -50,7 +51,23 @@ const MovieFilter = () => {
       })
   }, [])
 
+  // Handle adult content toggle changes
+  const handleAdultContentChange = (checked) => {
+    setAdult(checked)
+
+    // If turning off adult content, also reset age verification
+    if (!checked) {
+      setAgeVerified(false)
+    }
+  }
+
   const filterMovies = () => {
+    // If adult content is selected but age not verified, don't proceed
+    if (adult && !ageVerified) {
+      alert("Please confirm you are 21+ years old to include adult content")
+      return
+    }
+
     // Collect search criteria to pass to results page
     const searchCriteria = {
       language: language || "",
@@ -72,6 +89,7 @@ const MovieFilter = () => {
     setLanguage("")
     setMinRating(0)
     setAdult(false)
+    setAgeVerified(false)
     setCountry("")
     setReleaseYear("")
     setRuntime("")
@@ -95,13 +113,30 @@ const MovieFilter = () => {
 
   return (
     <div className="movie-filter movie-filter-container">
-      <div className="marquee" style={{ backgroundColor: '#ffcc00', color: '#000', padding: '10px', textAlign: 'center', cursor: 'pointer' }} onClick={() => navigate('/domain-sale')}>
-        <marquee behavior="scroll" direction="left" style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
+      <div
+        className="marquee"
+        style={{ backgroundColor: "#ffcc00", color: "#000", padding: "10px", textAlign: "center", cursor: "pointer" }}
+        onClick={() => navigate("/domain-sale")}
+      >
+        <marquee behavior="scroll" direction="left" style={{ fontWeight: "bold", fontSize: "1.2em" }}>
           This domain is available for sale. Click to know more.
         </marquee>
       </div>
       <div className="movie-filter-inner">
-        <h1 className="movie-filter-title" style={{ backgroundColor: 'white', color: 'black', padding: '10px', borderRadius: '5px', textAlign: 'center', fontFamily: 'Arial, sans-serif', marginTop: '20px' }}>infimovies.com</h1>
+        <h1
+          className="movie-filter-title"
+          style={{
+            backgroundColor: "white",
+            color: "black",
+            padding: "10px",
+            borderRadius: "5px",
+            textAlign: "center",
+            fontFamily: "Arial, sans-serif",
+            marginTop: "20px",
+          }}
+        >
+          infimovies.com
+        </h1>
 
         <div className="movie-filter-card">
           <h2 className="movie-filter-card-title">Find Movies</h2>
@@ -126,7 +161,15 @@ const MovieFilter = () => {
                               ? "Japanese"
                               : lang === "it"
                                 ? "Italian"
-                                : lang}
+                                : lang === "zh"
+                                  ? "Chinese"
+                                  : lang === "ko"
+                                    ? "Korean"
+                                    : lang === "ru"
+                                      ? "Russian"
+                                      : lang === "hi"
+                                        ? "Hindi"
+                                        : lang}
                   </option>
                 ))}
               </select>
@@ -153,13 +196,56 @@ const MovieFilter = () => {
               </div>
             </div>
 
-            {/* Adult content toggle */}
-            <div className="form-group toggle-container">
-              <label className="toggle-switch">
-                <input type="checkbox" checked={adult} onChange={(e) => setAdult(e.target.checked)} />
-                <span className="toggle-slider"></span>
-              </label>
-              <span className="form-label">Include Adult Content</span>
+            {/* Adult content toggle with age verification */}
+            <div className="form-group">
+              <div className="toggle-container">
+                <label className="toggle-switch">
+                  <input type="checkbox" checked={adult} onChange={(e) => handleAdultContentChange(e.target.checked)} />
+                  <span className="toggle-slider"></span>
+                </label>
+                <span className="form-label">Include Adult Content</span>
+              </div>
+
+              {/* Age verification checkbox - now as a separate div below the toggle */}
+              {adult && (
+                <div
+                  className="age-verification"
+                  style={{
+                    marginTop: "10px",
+                    display: "flex",
+                    alignItems: "flex-start",
+                    width: "100%",
+                  }}
+                >
+                  <label
+                    className="checkbox-container"
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      gap: "8px",
+                      maxWidth: "100%",
+                      flexWrap: "nowrap",
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={ageVerified}
+                      onChange={(e) => setAgeVerified(e.target.checked)}
+                      style={{ marginTop: "3px" }}
+                    />
+                    <span
+                      className="age-text"
+                      style={{
+                        fontSize: "0.85rem",
+                        lineHeight: "1.2",
+                        flexShrink: 1,
+                      }}
+                    >
+                      I'm 21+ years and I'm aware that it may produce adult content
+                    </span>
+                  </label>
+                </div>
+              )}
             </div>
 
             {/* Country selector */}
@@ -190,7 +276,7 @@ const MovieFilter = () => {
 
             {/* Release year dropdown */}
             <div className="form-group">
-              <label className="form-label">Release Year (±3 years)</label>
+              <label className="form-label">Release Year (and newer)</label>
               <select className="form-select" value={releaseYear} onChange={(e) => setReleaseYear(e.target.value)}>
                 <option value="">All Years</option>
                 {availableYears.map((year) => (
@@ -258,3 +344,4 @@ const MovieFilter = () => {
 }
 
 export default MovieFilter
+
